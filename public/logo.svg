@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
+  <!-- C Shield -->
+  <rect x="2" y="2" width="44" height="56" rx="4" stroke="#1e3a5f" stroke-width="2.5" fill="white"/>
+  <text x="24" y="42" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#1e3a5f" text-anchor="middle">C</text>
+  <!-- Company Name -->
+  <text x="56" y="22" font-family="'Inter', Arial, sans-serif" font-size="18" font-weight="700" fill="#1e3a5f" letter-spacing="2">CHANDAN</text>
+  <text x="56" y="42" font-family="'Inter', Arial, sans-serif" font-size="14" font-weight="600" fill="#1e3a5f" letter-spacing="3.5">STEEL LIMITED</text>
+  <!-- Tagline -->
+  <text x="56" y="55" font-family="'Inter', Arial, sans-serif" font-size="8.5" font-style="italic" fill="#4a6d8c" letter-spacing="1">True Stainless Value</text>
+</svg>

@@ -1,0 +1,768 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Corporate Color Palette — White/Cream + Navy Blue */
+  --bg-body: #f5f3ef;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafaf8;
+  --bg-sidebar: #0f2744;
+  --bg-sidebar-deep: #0a1c33;
+  --border: rgba(30, 58, 95, 0.12);
+  --border-hover: rgba(30, 58, 95, 0.22);
+  --border-focus: rgba(30, 58, 95, 0.45);
+
+  --primary: #1e3a5f;
+  --primary-hover: #15304f;
+  --primary-light: #2a5280;
+  --primary-glow: rgba(30, 58, 95, 0.10);
+  --secondary: #0d9488;
+  --secondary-glow: rgba(13, 148, 136, 0.1);
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #5a6478;
+  --text-muted: #9ca3af;
+  --text-on-dark: #e8ecf1;
+
+  --success: #10b981;
+  --warning: #e5a100;
+  --error: #dc2626;
+  --info: #2563eb;
+
+  /* Fonts & Shadows */
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --shadow-sm: 0 1px 3px rgba(30, 58, 95, 0.06), 0 1px 2px rgba(30, 58, 95, 0.04);
+  --shadow-lg: 0 4px 16px rgba(30, 58, 95, 0.08), 0 2px 6px rgba(30, 58, 95, 0.04);
+  --shadow-card: 0 1px 4px rgba(30, 58, 95, 0.05);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-body);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 95, 0.18);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 58, 95, 0.35);
+}
+
+/* ============================================================
+   Sidebar and Main Layout
+   ============================================================ */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, var(--bg-sidebar) 0%, var(--bg-sidebar-deep) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2.25rem 2.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================================
+   Logo and Navigation
+   ============================================================ */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.sidebar-logo img {
+  height: 44px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  /* Ensures logo shows white on the dark sidebar */
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  list-style: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-item.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a5280 0%, #1e3a5f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+/* ============================================================
+   Global Typography & Headers
+   ============================================================ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+  color: var(--primary);
+}
+
+.page-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   Cards & Layout grids
+   ============================================================ */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+
+/* ============================================================
+   Inputs & Form Elements
+   ============================================================ */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.input-field {
+  background-color: #fafaf8;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  transition: var(--transition);
+  font-family: var(--font-sans);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+  background-color: #fff;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Custom Toggle Switch
+   ============================================================ */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: #d1d5db;
+  border-radius: 12px;
+  transition: var(--transition);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.toggle-container.active .toggle-switch {
+  background-color: var(--primary);
+}
+
+.toggle-container.active .toggle-switch::after {
+  transform: translateX(20px);
+}
+
+/* ============================================================
+   Sliders
+   ============================================================ */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.slider-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: #e5e7eb;
+  outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 1px 4px rgba(30, 58, 95, 0.3);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
+}
+
+.btn-secondary {
+  background-color: #fff;
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: #f8f7f5;
+  border-color: var(--border-hover);
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #0d9488;
+}
+
+/* ============================================================
+   Cheque Layout Mockup Preview (202x92 Ratio)
+   ============================================================ */
+.cheque-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #f0ede8;
+  border-radius: var(--radius);
+  border: 1px dashed rgba(30, 58, 95, 0.15);
+  margin-bottom: 1.5rem;
+}
+
+.cheque-mockup {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  aspect-ratio: 202 / 92;
+  background: linear-gradient(135deg, #e8f0fe 0%, #dde8f6 50%, #d4e0f0 100%);
+  border: 1px solid #94b8d8;
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg), 0 8px 24px rgba(30, 58, 95, 0.12);
+  color: #0f172a;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  padding: 4.5%;
+}
+
+.cheque-crossing {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 90px;
+  height: 50px;
+  border-right: 1.5px solid #0f172a;
+  transform: rotate(-15deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 5px;
+  pointer-events: none;
+}
+
+.cheque-crossing::before {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 0;
+  bottom: 0;
+  border-right: 1.5px solid #0f172a;
+}
+
+.cheque-crossing-text {
+  font-size: 6px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.cheque-date-box {
+  position: absolute;
+  top: 6%;
+  right: 4.5%;
+  display: flex;
+  gap: 1.5%;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.cheque-date-digit {
+  width: 18px;
+  height: 22px;
+  border: 1px solid #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cheque-payee-line {
+  margin-top: 6%;
+  font-size: 12px;
+  border-bottom: 1px dotted #0f172a;
+  padding-bottom: 2px;
+  padding-left: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cheque-payee-line::before {
+  content: 'PAY';
+  font-weight: bold;
+  position: absolute;
+  left: 4.5%;
+}
+
+.cheque-amount-words {
+  margin-top: 4%;
+  font-size: 10px;
+  line-height: 1.7;
+  border-bottom: 1px dotted #0f172a;
+  padding-bottom: 2px;
+  padding-left: 120px;
+  height: 38px;
+  overflow: hidden;
+}
+
+.cheque-amount-words::before {
+  content: 'RUPEES';
+  font-weight: bold;
+  position: absolute;
+  left: 4.5%;
+}
+
+.cheque-amount-box {
+  position: absolute;
+  bottom: 30%;
+  right: 4.5%;
+  width: 28%;
+  height: 28px;
+  border: 2px solid #0f172a;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.cheque-amount-box::before {
+  content: '₹';
+  margin-right: 5px;
+}
+
+.cheque-signatory {
+  position: absolute;
+  bottom: 6%;
+  right: 4.5%;
+  font-size: 9px;
+  font-weight: bold;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Alert Warning Boxes
+   ============================================================ */
+.alert-box {
+  background-color: rgba(229, 161, 0, 0.06);
+  border: 1px solid rgba(229, 161, 0, 0.2);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.alert-icon {
+  color: var(--warning);
+  flex-shrink: 0;
+}
+
+.alert-message {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.alert-message strong {
+  color: var(--warning);
+}
+
+/* ============================================================
+   Interactive A4 Calibration Simulator
+   ============================================================ */
+.a4-simulator-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0ede8;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  aspect-ratio: 1 / 1.1;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.a4-sheet {
+  width: 80%;
+  max-width: 250px;
+  aspect-ratio: 210 / 297;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 2px;
+  box-shadow: 0 6px 20px rgba(30, 58, 95, 0.12);
+  position: relative;
+}
+
+.a4-cheque-mock {
+  position: absolute;
+  background-color: rgba(30, 58, 95, 0.12);
+  border: 1.5px solid var(--primary);
+  border-radius: 1px;
+  transition: transform 0.25s ease, left 0.25s ease, right 0.25s ease, top 0.25s ease, bottom 0.25s ease, width 0.25s ease, height 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.a4-cheque-text {
+  font-size: 7px;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   DataGrid / Tables
+   ============================================================ */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+}
+
+th {
+  background-color: #f5f3ef;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+tr {
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+tr:hover {
+  background-color: #fafaf8;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+   Badges
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-printed {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.badge-draft {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.badge-spoiled {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.badge-cancelled {
+  background-color: rgba(107, 114, 128, 0.08);
+  color: #6b7280;
+}
+
+/* ============================================================
+   File Upload CSV Area
+   ============================================================ */
+.file-dropzone {
+  border: 2px dashed rgba(30, 58, 95, 0.15);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: #fafaf8;
+}
+
+.file-dropzone:hover {
+  border-color: var(--primary);
+  background-color: rgba(30, 58, 95, 0.02);
+}
+
+.dropzone-icon {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+/* ============================================================
+   Modal Popup Window
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 39, 68, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 550px;
+  background-color: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(30, 58, 95, 0.15);
+  position: relative;
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
