@@ -1,10 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
-  <!-- C Shield -->
-  <rect x="2" y="2" width="44" height="56" rx="4" stroke="#1e3a5f" stroke-width="2.5" fill="white"/>
-  <text x="24" y="42" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#1e3a5f" text-anchor="middle">C</text>
+  <!-- C Shield Background -->
+  <rect x="2" y="2" width="44" height="56" rx="0" fill="#2a5280"/>
+  <!-- C Shield Cutout (using path to simulate the moon shape in the logo) -->
+  <path d="M 46 2 C 20 2, 8 20, 16 58 L 46 58 C 30 50, 30 10, 46 2 Z" fill="#ffffff"/>
+  
   <!-- Company Name -->
-  <text x="56" y="22" font-family="'Inter', Arial, sans-serif" font-size="18" font-weight="700" fill="#1e3a5f" letter-spacing="2">CHANDAN</text>
-  <text x="56" y="42" font-family="'Inter', Arial, sans-serif" font-size="14" font-weight="600" fill="#1e3a5f" letter-spacing="3.5">STEEL LIMITED</text>
+  <text x="56" y="24" font-family="'Inter', Arial, sans-serif" font-size="22" font-weight="800" fill="#ffffff" letter-spacing="0.5">CHANDAN</text>
+  <text x="56" y="44" font-family="'Inter', Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff" letter-spacing="3.5">STEEL LIMITED</text>
+  
+  <!-- Divider Line -->
+  <line x1="56" y1="49" x2="230" y2="49" stroke="#9ca3af" stroke-width="1"/>
+  
   <!-- Tagline -->
-  <text x="56" y="55" font-family="'Inter', Arial, sans-serif" font-size="8.5" font-style="italic" fill="#4a6d8c" letter-spacing="1">True Stainless Value</text>
+  <text x="56" y="58" font-family="'Inter', Arial, sans-serif" font-size="8" font-weight="300" fill="#d1d5db" letter-spacing="1">True Stainless Value</text>
 </svg>

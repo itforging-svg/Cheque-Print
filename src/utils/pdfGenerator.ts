@@ -8,6 +8,12 @@ export interface PrinterProfile {
   offsetY: number; // in mm
 }
 
+// Standard Paper & Cheque Dimensions
+const A4_WIDTH_MM = 210;
+const A4_HEIGHT_MM = 297;
+const CHEQUE_WIDTH_MM = 202;
+const CHEQUE_HEIGHT_MM = 92;
+
 export interface ChequeRecord {
   payeeName: string;
   amount: number;
@@ -25,12 +31,10 @@ function getA4Coords(
 ): { x: number; y: number; angle: number } {
   const { feedOrientation, feedAlignment, offsetX, offsetY } = profile;
   
-  // A4 dimensions
-  const A4_W = 210;
-  
-  // Cheque dimensions
-  const CH_W = 202;
-  const CH_H = 92;
+  // Dimensions
+  const A4_W = A4_WIDTH_MM;
+  const CH_W = CHEQUE_WIDTH_MM;
+  const CH_H = CHEQUE_HEIGHT_MM;
 
   let xMargin = 0;
 
@@ -212,8 +216,8 @@ export function generateCalibrationPDF(profile: PrinterProfile): jsPDF {
     format: "a4"
   });
 
-  const A4_W = 210;
-  const A4_H = 297;
+  const A4_W = A4_WIDTH_MM;
+  const A4_H = A4_HEIGHT_MM;
 
   doc.setDrawColor(200, 200, 200); // Soft grey grid
   doc.setLineWidth(0.1);
@@ -242,8 +246,8 @@ export function generateCalibrationPDF(profile: PrinterProfile): jsPDF {
   doc.setLineDashPattern([2, 2], 0);
 
   // Math for cheque boundaries
-  const CH_W = 202;
-  const CH_H = 92;
+  const CH_W = CHEQUE_WIDTH_MM;
+  const CH_H = CHEQUE_HEIGHT_MM;
   let baseLeft = 0;
   
   if (profile.feedOrientation === "landscape") {

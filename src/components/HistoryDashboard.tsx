@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { usePaginatedQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { Search, Calendar, FileSpreadsheet, AlertCircle, RefreshCw, BarChart3, AlertTriangle, Printer } from "lucide-react";
 import { generateChequePDF } from "../utils/pdfGenerator";
 import type { ChequeRecord, PrinterProfile } from "../utils/pdfGenerator";
@@ -17,7 +19,6 @@ interface LedgerRecord {
 }
 
 interface HistoryDashboardProps {
-  records: LedgerRecord[];
   profile: PrinterProfile;
   onStatusChange: (id: string, newStatus: string) => void;
   onReprint: (id: string) => void;
@@ -25,7 +26,6 @@ interface HistoryDashboardProps {
 }
 
 export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({ 
-  records, 
   profile,
   onStatusChange,
   onReprint,
@@ -35,6 +35,25 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reprintRow, setReprintRow] = useState<LedgerRecord | null>(null);
+
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.ledger.listPaginated,
+    {},
+    { initialNumItems: 50 }
+  );
+
+  const records = results.map(r => ({
+    id: r._id,
+    payeeName: r.payeeName,
+    amount: r.amount,
+    chequeDate: r.chequeDate,
+    bankName: r.bankName,
+    acPayee: r.acPayee,
+    notes: r.notes,
+    status: r.status,
+    createdAt: r.createdAt,
+    printCount: r.printCount
+  }));
 
   const handleReprintClick = (row: LedgerRecord) => {
     setReprintRow(row);
@@ -329,6 +348,17 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+        
+        {status === "CanLoadMore" && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+            <button 
+              className="btn btn-secondary" 
+              onClick={() => loadMore(50)}
+            >
+              Load More Records
+            </button>
           </div>
         )}
       </div>

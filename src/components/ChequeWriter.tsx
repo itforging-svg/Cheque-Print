@@ -257,11 +257,6 @@ export const ChequeWriter: React.FC<ChequeWriterProps> = ({ profile, onRecordAdd
                   )}
                 </div>
 
-                {/* Signatory Label */}
-                <div className="cheque-signatory">
-                  <p style={{ fontSize: "7px", opacity: 0.6 }}>For {bankName.split(" ")[0]} account</p>
-                  <p style={{ marginTop: "15px" }}>Authorized Signatory</p>
-                </div>
               </div>
             </div>
 

@@ -25,7 +25,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTa
       {/* Sidebar Navigation */}
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <img src="/logo.svg" alt="Chandan Steel Limited" />
+          <div style={{ backgroundColor: "#ffffff", padding: "0.4rem 0.6rem", borderRadius: "8px", width: "100%", display: "flex", justifyContent: "center" }}>
+            <img src="/logo.png" alt="Chandan Steel Limited" style={{ height: "32px", width: "auto", display: "block" }} />
+          </div>
         </div>
 
         <nav>

@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 
 // Insert a single cheque record
 export const insert = mutation({
@@ -85,13 +86,13 @@ export const clearAll = mutation({
   },
 });
 
-// List all records, newest first
-export const list = query({
-  handler: async (ctx) => {
-    const records = await ctx.db
+// List records, newest first (paginated)
+export const listPaginated = query({
+  args: { paginationOpts: paginationOptsValidator },
+  handler: async (ctx, args) => {
+    return await ctx.db
       .query("cheque_ledger")
       .order("desc")
-      .collect();
-    return records;
+      .paginate(args.paginationOpts);
   },
 });

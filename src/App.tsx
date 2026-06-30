@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
+import type { Id } from "../convex/_generated/dataModel";
 import { Layout } from "./components/Layout";
 import { ChequeWriter } from "./components/ChequeWriter";
 import { BulkPrinter } from "./components/BulkPrinter";
@@ -19,7 +20,6 @@ function App() {
   const [activeTab, setActiveTab] = useState("writer");
   
   // Convex queries
-  const records = useQuery(api.ledger.list) ?? [];
   const savedProfile = useQuery(api.profiles.getDefault);
 
   // Convex mutations
@@ -50,15 +50,20 @@ function App() {
     notes?: string;
     status: string;
   }) => {
-    await insertRecord({
-      payeeName: record.payeeName,
-      amount: record.amount,
-      chequeDate: record.chequeDate,
-      bankName: record.bankName,
-      acPayee: record.acPayee,
-      notes: record.notes,
-      status: record.status,
-    });
+    try {
+      await insertRecord({
+        payeeName: record.payeeName,
+        amount: record.amount,
+        chequeDate: record.chequeDate,
+        bankName: record.bankName,
+        acPayee: record.acPayee,
+        notes: record.notes,
+        status: record.status,
+      });
+    } catch (error) {
+      console.error("Failed to insert record:", error);
+      alert("Error: Failed to save cheque record to database.");
+    }
   };
 
   const handleRecordsAdded = async (newRecords: {
@@ -70,60 +75,72 @@ function App() {
     notes?: string;
     status: string;
   }[]) => {
-    await insertBatchRecords({
-      records: newRecords.map(r => ({
-        payeeName: r.payeeName,
-        amount: r.amount,
-        chequeDate: r.chequeDate,
-        bankName: r.bankName,
-        acPayee: r.acPayee,
-        notes: r.notes,
-        status: r.status,
-      })),
-    });
+    try {
+      await insertBatchRecords({
+        records: newRecords.map(r => ({
+          payeeName: r.payeeName,
+          amount: r.amount,
+          chequeDate: r.chequeDate,
+          bankName: r.bankName,
+          acPayee: r.acPayee,
+          notes: r.notes,
+          status: r.status,
+        })),
+      });
+    } catch (error) {
+      console.error("Failed to insert batch records:", error);
+      alert("Error: Failed to save bulk cheque records to database.");
+    }
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    await updateRecordStatus({
-      id: id as any, // Convex Id type
-      newStatus,
-    });
+    try {
+      await updateRecordStatus({
+        id: id as Id<"cheque_ledger">,
+        newStatus,
+      });
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      alert("Error: Failed to update cheque status.");
+    }
   };
 
   const handleReprint = async (id: string) => {
-    await incrementPrintCount({
-      id: id as any,
-    });
+    try {
+      await incrementPrintCount({
+        id: id as Id<"cheque_ledger">,
+      });
+    } catch (error) {
+      console.error("Failed to increment print count:", error);
+      alert("Error: Failed to register reprint.");
+    }
   };
 
   const handleClearHistory = async () => {
     if (window.confirm("Are you sure you want to clear all transaction records? This action is irreversible.")) {
-      await clearAllRecords();
+      try {
+        await clearAllRecords();
+      } catch (error) {
+        console.error("Failed to clear history:", error);
+        alert("Error: Failed to clear history.");
+      }
     }
   };
 
   const handleProfileChange = async (newProfile: PrinterProfile) => {
-    await upsertProfile({
-      feedOrientation: newProfile.feedOrientation,
-      feedAlignment: newProfile.feedAlignment,
-      offsetX: newProfile.offsetX,
-      offsetY: newProfile.offsetY,
-    });
+    try {
+      await upsertProfile({
+        feedOrientation: newProfile.feedOrientation,
+        feedAlignment: newProfile.feedAlignment,
+        offsetX: newProfile.offsetX,
+        offsetY: newProfile.offsetY,
+      });
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+      alert("Error: Failed to save printer profile.");
+    }
   };
 
-  // Map Convex records to the component format
-  const mappedRecords = records.map((r) => ({
-    id: r._id,
-    payeeName: r.payeeName,
-    amount: r.amount,
-    chequeDate: r.chequeDate,
-    bankName: r.bankName,
-    acPayee: r.acPayee,
-    notes: r.notes,
-    status: r.status,
-    createdAt: r.createdAt,
-    printCount: r.printCount,
-  }));
 
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
@@ -150,7 +167,6 @@ function App() {
 
       {activeTab === "history" && (
         <HistoryDashboard 
-          records={mappedRecords} 
           profile={profile}
           onStatusChange={handleStatusChange}
           onReprint={handleReprint}
