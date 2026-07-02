@@ -30,7 +30,7 @@ function getA4Coords(
   profile: PrinterProfile
 ): { x: number; y: number; angle: number } {
   const { feedOrientation, feedAlignment, offsetX, offsetY } = profile;
-  
+
   // Dimensions
   const A4_W = A4_WIDTH_MM;
   const CH_W = CHEQUE_WIDTH_MM;
@@ -47,7 +47,7 @@ function getA4Coords(
     } else {
       xMargin = A4_W - CH_W; // 8mm
     }
-    
+
     return {
       x: xMargin + rx + offsetX,
       y: ry + offsetY,
@@ -63,7 +63,7 @@ function getA4Coords(
     } else {
       xMargin = A4_W - CH_H; // 118mm
     }
-    
+
     // Rotate 90 deg clockwise:
     // rx_rotated = 92 - ry
     // ry_rotated = rx
@@ -82,7 +82,7 @@ function drawChequeElements(
   profile: PrinterProfile
 ) {
   const { payeeName, amount, chequeDate, acPayee } = cheque;
-  
+
   // Format Date (DDMMYYYY)
   const dateParts = chequeDate.split("-");
   let dateDigits = "        ";
@@ -100,17 +100,17 @@ function drawChequeElements(
   const printText = (text: string, rx: number, ry: number, fontSize = 10, isBold = false) => {
     doc.setFont("courier", isBold ? "bold" : "normal");
     doc.setFontSize(fontSize);
-    
+
     const { x, y, angle } = getA4Coords(rx, ry, profile);
     doc.text(text, x, y, { angle: angle });
   };
 
   const printLine = (rx1: number, ry1: number, rx2: number, ry2: number, lineWidth = 0.2) => {
     doc.setLineWidth(lineWidth);
-    
+
     const p1 = getA4Coords(rx1, ry1, profile);
     const p2 = getA4Coords(rx2, ry2, profile);
-    
+
     doc.line(p1.x, p1.y, p2.x, p2.y);
   };
 
@@ -119,12 +119,12 @@ function drawChequeElements(
     // Draw two parallel lines at top left
     printLine(0, 22, 22, 0, 0.4);
     printLine(0, 28, 28, 0, 0.4);
-    
+
     // Write text inside. Since the crossing is 45 deg, we place it at midpoint
     // Relative to cheque (approx rx=5.2, ry=20.3 to center 9.0pt text baseline)
     doc.setFont("courier", "bold");
     doc.setFontSize(9);
-    
+
     // Adjust drawing angle based on page feed rotation:
     // In Landscape, the text flows from left-down to right-up, which is 45 deg counter-clockwise.
     // In Portrait, because the whole cheque is rotated 90 deg clockwise, the angle is 45 - 90 = -45 = 315 deg.
@@ -136,7 +136,7 @@ function drawChequeElements(
   // 2. Draw Date Digits
   // Standard CTS-2010 spacing: Box is approx 148-198mm from left, 8mm from top
   // Digits separated by approx 4.8mm
-  const dateStartRx = 149.0;
+  const dateStartRx = 156.0;
   const dateRy = 11.0;
   for (let i = 0; i < 8; i++) {
     printText(dateDigits[i], dateStartRx + i * 5.0, dateRy, 12, true);
@@ -150,7 +150,7 @@ function drawChequeElements(
   // Starts around 32mm from left, 30mm from top
   // Indian numbering word translation
   const words = numberToWords(amount);
-  
+
   // Wrap words to fit cheque width.
   // First line can take approx 45 characters, second line starts at 15mm from left, 39mm from top
   const maxLine1Chars = 48;
@@ -160,10 +160,10 @@ function drawChequeElements(
     // Find last space before max chars
     let splitIdx = words.lastIndexOf(" ", maxLine1Chars);
     if (splitIdx === -1) splitIdx = maxLine1Chars;
-    
+
     const line1 = words.substring(0, splitIdx);
     const line2 = words.substring(splitIdx).trim();
-    
+
     printText(line1, 30, 29.5, 10, true);
     printText(line2, 16, 37.5, 10, true);
   }
@@ -174,7 +174,7 @@ function drawChequeElements(
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
-  
+
   printText(`**${formattedAmount}/-`, 157.0, 41.0, 10.0, true);
 }
 
@@ -249,15 +249,15 @@ export function generateCalibrationPDF(profile: PrinterProfile): jsPDF {
   const CH_W = CHEQUE_WIDTH_MM;
   const CH_H = CHEQUE_HEIGHT_MM;
   let baseLeft = 0;
-  
+
   if (profile.feedOrientation === "landscape") {
-    baseLeft = profile.feedAlignment === "left" ? 0 : 
-               profile.feedAlignment === "center" ? (A4_W - CH_W) / 2 : 
-               (A4_W - CH_W);
-    
+    baseLeft = profile.feedAlignment === "left" ? 0 :
+      profile.feedAlignment === "center" ? (A4_W - CH_W) / 2 :
+        (A4_W - CH_W);
+
     // Draw target box (dotted)
     doc.rect(baseLeft, 0, CH_W, CH_H);
-    
+
     // Draw calibrated box (solid)
     doc.setDrawColor(16, 185, 129); // Green
     doc.setLineDashPattern([], 0); // Solid
@@ -268,15 +268,15 @@ export function generateCalibrationPDF(profile: PrinterProfile): jsPDF {
     doc.setTextColor(0, 0, 0);
     doc.text(`Calibration Target: ${profile.feedOrientation.toUpperCase()} - ${profile.feedAlignment.toUpperCase()}`, baseLeft + 15, 30);
     doc.text(`Offset X: ${profile.offsetX}mm, Offset Y: ${profile.offsetY}mm`, baseLeft + 15, 38);
-    
+
   } else {
-    baseLeft = profile.feedAlignment === "left" ? 0 : 
-               profile.feedAlignment === "center" ? (A4_W - CH_H) / 2 : 
-               (A4_W - CH_H);
-    
+    baseLeft = profile.feedAlignment === "left" ? 0 :
+      profile.feedAlignment === "center" ? (A4_W - CH_H) / 2 :
+        (A4_W - CH_H);
+
     // Target Box (dotted)
     doc.rect(baseLeft, 0, CH_H, CH_W);
-    
+
     // Calibrated Box (solid)
     doc.setDrawColor(16, 185, 129); // Green
     doc.setLineDashPattern([], 0); // Solid
